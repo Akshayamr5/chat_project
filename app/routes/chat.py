@@ -7,9 +7,10 @@ router = APIRouter()
 @router.post("/chat")
 def chat(request: ConversationRequest):
 
-    summary = generate_summary(request.conversation)
+    analysis = generate_summary(request.conversation)
 
     return {
         "message": request.conversation,
-        "summary": summary
+        "summary": analysis["summary"],
+        "sentiment":analysis["sentiment"]
     }

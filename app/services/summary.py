@@ -17,8 +17,18 @@ def generate_summary(text):
             model="llama-3.3-70b-versatile",
             messages=[
                 {
-                    "role": "system",
-                    "content": "Summarize in 1 short sentence."
+                "role": "system",
+                "content": """
+                You are a customer support AI.
+
+                Return output in JSON format:
+                {
+                "summary": "...",
+                "sentiment": "positive | neutral | negative"
+                }
+
+                Detect sentiment based on customer emotion.
+                """
                 },
                 {
                     "role": "user",
@@ -27,7 +37,18 @@ def generate_summary(text):
             ]
         )
 
-        return response.choices[0].message.content
+        import json
+
+        content = response.choices[0].message.content
+
+        try:
+            result = json.loads(content)
+            return result
+        except:
+            return {
+                "summary": content,
+                "sentiment": "neutral"
+            }
 
     except Exception as e:
         return f"Summary generation failed:{str(e)}"
