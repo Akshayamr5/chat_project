@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Business Insight Automation System</title>
+
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f5f7fa;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    text-align: center;
+    padding: 25px;
+    font-size: 28px;
+    font-weight: 600;
+    background: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    gap: 40px;
+}
+
+.card {
+    background: white;
+    width: 450px;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+textarea {
+    width: 100%;
+    height: 120px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    resize: none;
+    font-size: 14px;
+}
+
+input[type="file"] {
+    margin-top: 15px;
+}
+
+button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+button:hover {
+    background: #1e4fd8;
+}
+
+pre {
+    background: #f0f2f5;
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto;
+}
+</style>
+
+</head>
+<body>
+
+<header>
+Business Insight Automation System
+</header>
+
+<div class="container">
+
+<div class="card">
+<h3>Text Conversation</h3>
+<textarea id="conversation" placeholder="Type customer conversation..."></textarea>
+<button onclick="analyzeText()">Analyze Text</button>
+
+<hr style="margin: 25px 0;">
+
+<h3>Upload Audio</h3>
+<input type="file" id="audioFile" accept="audio/*">
+<button onclick="analyzeAudio()">Analyze Audio</button>
+</div>
+
+<div class="card">
+<h3>Analysis Result</h3>
+<pre id="result">{}</pre>
+</div>
+
+</div>
+
+<script>
+
+async function analyzeText() {
+    const conversation = document.getElementById("conversation").value;
+
+    const response = await fetch("http://127.0.0.1:8000/analyze-text", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ conversation: conversation })
+    });
+
+    const data = await response.json();
+    document.getElementById("result").textContent =
+        JSON.stringify(data, null, 2);
+}
+
+
+async function analyzeAudio() {
+    const fileInput = document.getElementById("audioFile");
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert("Please select an audio file first.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await fetch("http://127.0.0.1:8000/analyze-audio", {
+        method: "POST",
+        body: formData
+    });
+
+    const data = await response.json();
+    document.getElementById("result").textContent =
+        JSON.stringify(data, null, 2);
+}
+
+</script>
+
+</body>
+</html>

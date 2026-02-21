@@ -1,0 +1,30 @@
+{
+  "business_domain": "telecom",
+
+  "products": [
+    "subscription",
+    "premium plan",
+    "basic plan",
+    "pro version"
+  ],
+
+  "risk_triggers": [
+    "cancel",
+    "refund",
+    "port",
+    "terminate"
+  ],
+
+  "weights": {
+    "negative_sentiment": 0.35,
+    "complaint_intent": 0.30,
+    "high_urgency": 0.15,
+    "topic_issue": 0.10,
+    "high_value_product": 0.10
+  },
+
+  "high_value_products": [
+    "premium plan",
+    "pro version"
+  ]
+}
