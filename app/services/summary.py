@@ -10,7 +10,10 @@ client = OpenAI(
 def generate_summary(text):
 
     if not text:
-        return "No conversation provided."
+        return{
+            "summary":"No conversation provided.",
+            "sentiment":"neutral"
+        }
 
     try:
         response = client.chat.completions.create(
@@ -51,4 +54,7 @@ def generate_summary(text):
             }
 
     except Exception as e:
-        return f"Summary generation failed:{str(e)}"
+        return {
+            "summary":f"Summary generation failed:{str(e)}",
+            "sentiment":"neutral"
+        }
